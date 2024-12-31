@@ -6,7 +6,6 @@ import "../css/Tailwind.css";
 function PostDetail() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
-  const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editContent, setEditContent] = useState("");
@@ -18,14 +17,14 @@ function PostDetail() {
       const response = await axios.get(`http://localhost:8080/post/${id}`);
       setPost(response.data);
     } catch (error) {
-      setError("Error fetching post details.");
-      console.error(error);
+      window.alert("Post Not Found");
+      navigate("/")
     }
   };
 
   useEffect(() => {
     fetchPost();
-  }, [id]);
+  },[]);
 
   const handleEditSave = async () => {
     try {
@@ -40,6 +39,10 @@ function PostDetail() {
       window.alert("Error saving the post. Incorrect password?");
     }
   };
+
+  const backButton = () => {
+    navigate("/");
+  }
 
   const handleDeleteConfirm = async () => {
     try {
@@ -90,6 +93,12 @@ function PostDetail() {
             onClick={() => setShowDeleteModal(true)}
           >
             Delete
+          </button>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={() => backButton()}
+          >
+            Back to main post
           </button>
         </div>
       </div>
